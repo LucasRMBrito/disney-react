@@ -1,23 +1,46 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 
+
 function App() {
-  return (
+ 
+  const [teste, setTest] = useState(0)
+  console.log(teste)
+
+  const APIdisney = async (indice) => {
+    const disney = await fetch(`https://api.disneyapi.dev/character`);
+    
+    const dados = await disney.json();
+    console.log(dados.data[indice]);
+    
+    const nome = document.querySelector('.nome')
+    nome.innerHTML = dados.data[indice].name
+    const img = document.querySelector('.imagem')
+    img.src = dados.data[indice].imageUrl
+
+  }
+
+  function proximo() {
+    setTest(teste + 1);
+
+  }
+  function anterior() {
+    if (teste > 0) {
+      setTest(teste - 1);
+    }
+  }
+  
+  useEffect(()=>{
+    APIdisney(teste);
+  },[teste]);
+
+    return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <img className='imagem'/>
+      <h1 className='nome'/>
+      <button onClick={anterior} className="botaoAntes">Anterior</button>
+      <button onClick={proximo} className="botaoDepois">Próximo</button>
     </div>
   );
 }
